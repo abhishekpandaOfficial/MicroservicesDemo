@@ -3,9 +3,9 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>4ea75eee-1dd5-475b-8532-d3be4ce025e7</ProjectGuid>
+    <ProjectGuid>c37a7ce4-cf1b-4db9-a425-8ecd4f3e319a</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/weatherforecast</DockerServiceUrl>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>customers.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

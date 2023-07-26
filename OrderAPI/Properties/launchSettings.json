@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Customers.API": {
+    "OrderAPI": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7177;http://localhost:5245"
+      "applicationUrl": "http://localhost:5281"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -21,9 +21,8 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
-      "publishAllPorts": true,
-      "useSSL": true
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "publishAllPorts": true
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",
@@ -31,8 +30,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:3167",
-      "sslPort": 44302
+      "applicationUrl": "http://localhost:54786",
+      "sslPort": 0
     }
   }
 }

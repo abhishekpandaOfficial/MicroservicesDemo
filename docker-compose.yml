@@ -2,19 +2,10 @@ version: '3.4'
 
 networks:
   backend:
+
 services:
-  customerdb:
-    container_name: customer-db
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-        - ACCEPT_EULA=Y
-        - SA_PASSWORD =Panda@1234
-    networks:
-      - backend
-    ports:
-        - 1443:1443
+     
   customers.api:
-    container_name: customer-api
     image: ${DOCKER_REGISTRY-}customersapi
     build:
       context: .
@@ -22,9 +13,68 @@ services:
     networks:
       - backend
     ports:
-        - 8002:80
-    environment:
-      - DB_HOST = customerdb
-      - DB_NAME = customer
-      
+      - "18005:80"
+    depends_on:
+      - customerdb
+ 
 
+  customerdb:
+    container_name: cutomer-db
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports:
+     - "11453:1433"
+    networks:
+      - backend
+    environment:
+         - DB_HOST=customerdb
+         - DB_NAME=dms_product
+         - DB_PASSWORD ="S3cur3P@ssW0rd!"
+         - ACCEPT_EULA = "Y"
+  
+  productdb:
+     container_name: product-db
+     image: mysql:8.0
+     environment:
+      - MYSQL_ROOT_PASSWORD=Lipi@9040
+     ports:
+       - 18003:3306
+     networks:
+       - backend
+
+
+  productwebapi:
+    container_name: product-api
+    image: ${DOCKER_REGISTRY-}productwebapi
+    build:
+      context: .
+      dockerfile: ProductWebAPI/Dockerfile
+    networks:
+       - backend
+    ports:
+       - 28004:80
+    environment:
+      - DB_HOST=productdb
+      - DB_NAME=dms_product
+      - DB_ROOT_PASSWORD =Lipi@9040
+
+  orderdb:
+     container_name: order-db
+     image: mongo
+     ports:
+       - 18008:27017 
+     networks:
+       - backend
+  orderapi:
+    container_name: order-api
+    image: ${DOCKER_REGISTRY-}orderapi
+    build:
+      context: .
+      dockerfile: OrderAPI/Dockerfile
+    ports:
+      - 18009:80
+    networks:
+       - backend
+    environment:
+      - DB_HOST=orderdb
+      - DB_NAME=dms_order
+      

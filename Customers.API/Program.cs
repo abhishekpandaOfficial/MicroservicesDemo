@@ -1,27 +1,57 @@
 using Customers.API;
+using Customers.API.services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Title",
+        Version = "v1",
+        Description = "This is Microservice Demo API Services ",
+        TermsOfService= new Uri("https://example.com/terms"),
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Abhishek Panda",
+            Email="Official.abhishekpanda@gmail.com",
+            Url = new Uri("https://www.linkedin.com/in/abhishekpandaofficial/")
 
-/*  Database Context Dependency Injection */
-var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-var dbPassword = Environment.GetEnvironmentVariable("SA_PASSWORD");
-var ConnectionString = $"Data Source ={dbHost};Initial Catalog={dbName};User ID=sa; Password={dbPassword};Trusted_Connection=True; Persist Security Info=True; TrustServerCertificate=true;";
+        }
 
-builder.Services.AddDbContext<CustomerDbContext>(opt => opt.UseSqlServer(ConnectionString));
+    });
 
-/* ==================================== */
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
+
+
+builder.Services.AddDbContext<CustomerDbContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"));
+});
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
- app.UseHttpsRedirection();
+
+app.UseSwagger(x => x.SerializeAsV2 = true);
+app.UseStaticFiles();
+
 
 app.UseAuthorization();
 

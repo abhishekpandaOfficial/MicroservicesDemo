@@ -12,10 +12,10 @@ namespace Customers.API.Models
         [Column("customer_id")]
         public int CustomerID { get; set; }
         [Column("customer_name")]
-        public string CustomerName { get; set; }
+        public string? CustomerName { get; set; }
         [Column("mobile_no")]
-        public string MobileNumber { get; set; }
+        public string? MobileNumber { get; set; }
         [Column("email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
     }
 }
