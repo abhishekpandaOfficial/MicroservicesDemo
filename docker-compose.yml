@@ -4,7 +4,6 @@ networks:
   backend:
 
 services:
-     
   customers.api:
     image: ${DOCKER_REGISTRY-}customersapi
     build:
@@ -16,31 +15,29 @@ services:
       - "18005:80"
     depends_on:
       - customerdb
- 
 
   customerdb:
-    container_name: cutomer-db
+    container_name: customer-db
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     ports:
-     - "11453:1433"
+      - "11453:1433"
     networks:
       - backend
     environment:
-         - DB_HOST=customerdb
-         - DB_NAME=dms_product
-         - DB_PASSWORD ="S3cur3P@ssW0rd!"
-         - ACCEPT_EULA = "Y"
-  
-  productdb:
-     container_name: product-db
-     image: mysql:8.0
-     environment:
-      - MYSQL_ROOT_PASSWORD=Lipi@9040
-     ports:
-       - 18003:3306
-     networks:
-       - backend
+      - DB_HOST=customerdb
+      - DB_NAME=dms_product
+      - DB_PASSWORD=S3cur3P@ssW0rd!
+      - ACCEPT_EULA=Y
 
+  productdb:
+    container_name: product-db
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=Lipi@9040
+    ports:
+      - "18003:3306"
+    networks:
+      - backend
 
   productwebapi:
     container_name: product-api
@@ -49,21 +46,24 @@ services:
       context: .
       dockerfile: ProductWebAPI/Dockerfile
     networks:
-       - backend
+      - backend
     ports:
-       - 28004:80
+      - "28004:80"
     environment:
       - DB_HOST=productdb
       - DB_NAME=dms_product
-      - DB_ROOT_PASSWORD =Lipi@9040
+      - DB_ROOT_PASSWORD=Lipi@9040
+    depends_on:
+      - productdb
 
   orderdb:
-     container_name: order-db
-     image: mongo
-     ports:
-       - 18008:27017 
-     networks:
-       - backend
+    container_name: order-db
+    image: mongo
+    ports:
+      - "18008:27017"
+    networks:
+      - backend
+
   orderapi:
     container_name: order-api
     image: ${DOCKER_REGISTRY-}orderapi
@@ -71,10 +71,9 @@ services:
       context: .
       dockerfile: OrderAPI/Dockerfile
     ports:
-      - 18009:80
+      - "18009:80"
     networks:
-       - backend
+      - backend
     environment:
       - DB_HOST=orderdb
       - DB_NAME=dms_order
-      
