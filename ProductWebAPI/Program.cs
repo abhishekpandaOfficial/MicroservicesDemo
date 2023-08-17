@@ -1,12 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using ProductWebAPI.Models;
+using Serilog;
+
+using Serilog.Sinks.Elasticsearch;
+using System.Reflection;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
 
 
 /* Database Dependency Injection */
@@ -43,3 +49,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+ 

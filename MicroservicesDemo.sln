@@ -11,7 +11,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWebAPI", "ProductWebAPI\ProductWebAPI.csproj", "{5656FDC6-79CD-4B89-BDC5-88FEBD974B6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderAPI", "OrderAPI\OrderAPI.csproj", "{DFF9B479-DD2C-4E7B-8EEB-A5BD4034C698}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderAPI", "OrderAPI\OrderAPI.csproj", "{DFF9B479-DD2C-4E7B-8EEB-A5BD4034C698}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

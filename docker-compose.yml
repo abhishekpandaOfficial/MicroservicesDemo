@@ -1,8 +1,5 @@
 version: '3.4'
 
-networks:
-  backend:
-
 services:
   customers.api:
     image: ${DOCKER_REGISTRY-}customersapi
@@ -12,22 +9,28 @@ services:
     networks:
       - backend
     ports:
-      - "18005:80"
+      - "13580:80"
     depends_on:
       - customerdb
-
-  customerdb:
-    container_name: customer-db
-    image: "mcr.microsoft.com/mssql/server:2022-latest"
-    ports:
-      - "11453:1433"
-    networks:
-      - backend
     environment:
       - DB_HOST=customerdb
-      - DB_NAME=dms_product
-      - DB_PASSWORD=S3cur3P@ssW0rd!
-      - ACCEPT_EULA=Y
+      - DB_NAME=dms_customer
+      - DB_PASSWORD=Lipi@9040
+      - DB_USER=postgres
+
+  # PostgreSQL Database
+  customerdb:
+    image: postgres:latest
+    container_name: my_postgres_db
+    #restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Lipi@9040
+      #POSTGRES_DB: customerdb
+    ports:
+      - "15432:5432"
+    networks:
+      - backend
 
   productdb:
     container_name: product-db
@@ -60,7 +63,7 @@ services:
     container_name: order-db
     image: mongo
     ports:
-      - "18008:27017"
+      - "18654:27017"
     networks:
       - backend
 
@@ -71,9 +74,55 @@ services:
       context: .
       dockerfile: OrderAPI/Dockerfile
     ports:
-      - "18009:80"
+      - "18100:80"
     networks:
       - backend
     environment:
       - DB_HOST=orderdb
       - DB_NAME=dms_order
+
+  elasticsearch:  
+    container_name: elasticsearch  
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    ports:  
+      - 9200:9200  
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:  
+      - xpack.security.enabled=false 
+      - discovery.type=single-node  
+    networks:  
+      - elastic    
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:7.15.0
+    volumes:
+      - ./logstash/config:/usr/share/logstash/config
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5000:5000"
+    depends_on:
+      - elasticsearch 
+
+
+  kibana:  
+    container_name: kibana  
+    image: docker.elastic.co/kibana/kibana:8.7.1
+    ports:  
+      - 5601:5601  
+    depends_on:  
+      - elasticsearch  
+    environment:  
+      - ELASTICSEARCH_URL=http://elasticsearch:9200  
+    networks:  
+      - elastic
+
+
+networks: 
+  backend:
+  elastic:  
+    driver: bridge  
+  
+volumes:  
+  elasticsearch-data:
+

@@ -6,7 +6,8 @@
       "serviceActions": {
         "customers.api": "StartDebugging",
         "productwebapi": "StartDebugging",
-        "orderapi": "StartDebugging"
+        "orderapi": "StartDebugging",
+        "rediscacheapi": "StartDebugging"
       }
     }
   }

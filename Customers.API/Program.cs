@@ -33,11 +33,30 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+/* Database Context Dependency Injection */
 
-builder.Services.AddDbContext<CustomerDbContext>(opt =>
-{
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"));
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var dbuser = Environment.GetEnvironmentVariable("DB_USER");
+var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID={dbuser};Password={dbPassword}";
+
+builder.Services.AddDbContext<CustomerDbContext>(opt => { 
+    opt.UseNpgsql(builder.Configuration.GetConnectionString(connectionString));
+
 });
+
+//Host = localhost; Port = 5432; Database = my_database; Username = postgres; Password =
+
+/* ===================================== */
+
+
+//builder.Services.AddDbContext<CustomerDbContext>(opt =>
+// {
+//    opt.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"));
+//});
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
